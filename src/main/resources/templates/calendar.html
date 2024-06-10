@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" th:href="@{/css/calendar.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}">
+    <script th:src="@{/js/font-awesome.all.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/calendar.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <title>Home</title>
+</head>
+<body>
+<div class="container">
+    <div class="iphone">
+        <div class="header">
+            <div class="calendar-container">
+                <header class="calendar-header">
+                    <p class="calendar-current-date"></p>
+                    <div class="calendar-navigation">
+                      <span id="calendar-prev"
+                            class="material-symbols-rounded">
+                          chevron_left
+                      </span>
+                        <span id="calendar-next"
+                              class="material-symbols-rounded">
+                          chevron_right
+                      </span>
+                    </div>
+                </header>
+
+                <div class="calendar-body">
+                    <ul class="calendar-weekdays">
+                        <li>Sun</li>
+                        <li>Mon</li>
+                        <li>Tue</li>
+                        <li>Wed</li>
+                        <li>Thu</li>
+                        <li>Fri</li>
+                        <li>Sat</li>
+                    </ul>
+                    <ul class="calendar-dates"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="card">
+                <div class="upper-row">
+                    <div class="card-item">
+                        <span>Deposit</span>
+                        <span th:text="${calendarDTO.getDepositAmountStr()}">1&nbsp;804 </span>
+                    </div>
+                    <div class="card-item">
+                        <span>Withdraw</span>
+                        <span th:text="${calendarDTO.getWithdrawAmountStr()}">2&nbsp;000</span>
+                    </div>
+                    <div class="card-item">
+                        <span>Balance</span>
+                        <span th:text="${calendarDTO.getCurrentBalanceStr()}">2&nbsp;000</span>
+                    </div>
+                </div>
+            </div>
+            <div class="transactions">
+                <div class="transactions-categories">
+                    <span class="t-desc">Transactions in day</span>
+                    <span class="t-desc" th:text="${calendarDTO.getCurrentDateBalanceStr() + 'đ'}">40000đ</span>
+                </div>
+                <div class="transaction" th:each="transaction,stats : ${calendarDTO.getCurrentDateTransactions()}" th:with="isDeposit = ${transaction.getAmount() >= 0}">
+                    <div class="t-icon-container">
+                        <i th:class="${isDeposit ? 'fa-solid fa-right-to-bracket' : 'fa-solid fa-right-from-bracket'}"></i>
+                    </div>
+                    <div class="t-details">
+                        <div class="t-title" th:text="${transaction.getCategoryDTO().getCategoryName()}">Tiền Tiết Kiệm</div>
+                        <div class="t-time" th:text="${transaction.getDateStr()}">05/12/2023</div>
+                    </div>
+                    <div th:class="${'t-amount' + (isDeposit ? '' : ' red')}" th:text="${(isDeposit ? '+' : '') + transaction.getAmountStr()}">+&nbsp;50,000₫</div>
+                </div>
+            </div>
+        </div>
+        <div class="drawer">
+            <span><i class="fa-solid fa-money-bill-trend-up" onclick="goToDeposit()"></i></span>
+            <span><i class="fa-solid fa-money-bill-trend-up fa-flip-vertical" onclick="goToWithdraw()"></i></span>
+            <div class="menu-btn"><i class="fa-solid fa-house-user" onclick="goToHome()"></i></div>
+            <span><!---to evenly space icons---></span>
+            <span><i class="fa-regular fa-calendar-days" onclick="goToCalendar()"></i></span>
+            <span><i class="fa-solid fa-power-off" onclick="logout()"></i></span>
+        </div>
+
+    </div>
+</div>
+<form id="form" th:action="@{/calendar}" method="post">
+    <input type="hidden" name="date" id="date" >
+</form>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var date = new Date([[${calendarDTO.getDate()}]]);
+/*]]>*/
+</script>
+<script th:src="@{/js/calendar.js}"></script>
+</body>
+
+</html>

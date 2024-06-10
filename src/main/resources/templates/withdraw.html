@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{/css/withdraw.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}">
+    <script th:src="@{/js/font-awesome.all.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/withdraw.js}"></script>
+    <title>Withdraw</title>
+</head>
+<body>
+<div class="container">
+    <div class="iphone">
+        <div class="header">
+            <div class="header-summary">
+                <div class="summary-text">
+                    My Balance
+                </div>
+                <div class="summary-balance">
+                    <span th:text="${currentBalance}">2.000.000</span><span> VNĐ</span>
+                </div>
+                <div class="summary-text-2">
+                    <span></span>
+                </div>
+            </div>
+            <div class="user-profile">
+                <img th:src="@{/img/avatar.png}" class="user-photo" alt="avatar">
+            </div>
+        </div>
+        <div class="content">
+            <div class="card">
+                <form id="withdrawForm" method="post" th:action="@{/finance/withdraw}">
+                    <div class="form-div">
+                        <div class="form-item">
+                            <label for="datepicker">Date</label>
+                            <input type="date" id="datepicker">
+                            <input type="hidden" name="date" id="date">
+                        </div>
+                        <div class="form-item">
+                            <label for="amount">Amount</label>
+                            <div>
+                                <i class="fa-solid fa-coins"></i>
+                                <input type="text" id="amount" name="amount" placeholder="0.0">
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label for="description">Description</label>
+                            <div>
+                                <i class="fa-solid fa-comments-dollar"></i>
+                                <input type="text" id="description" name="description" placeholder="_____________">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-div">
+                        <div class="category-line">
+                            <input type="button" th:each="category,state : ${financeDTO.getCategoryDTOList()}" th:if="${category.getCategoryType() == 'WITHDRAW'}" th:value="${category.getCategoryName()}" th:class="${state.index == 0 ? 'active' : ''}" th:onclick="|selectCategory(this, '${category.getCategoryId()}')|">
+                        </div>
+                        <input type="hidden" th:value="${financeDTO.getCategoryDTOList().get(0).getCategoryId()}" name="categoryId" id="categoryId">
+                    </div>
+                    <div class="submit-btn-div">
+                        <input id="submitBtn" type="button" value="Withdraw" onclick="submitForm()">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="drawer">
+            <span><i class="fa-solid fa-money-bill-trend-up" onclick="goToDeposit()"></i></span>
+            <span><i class="fa-solid fa-money-bill-trend-up fa-flip-vertical" onclick="goToWithdraw()"></i></span>
+            <div class="menu-btn"><i class="fa-solid fa-house-user" onclick="goToHome()"></i></div>
+            <span><!---to evenly space icons---></span>
+            <span><i class="fa-regular fa-calendar-days" onclick="goToCalendar()"></i></span>
+            <span><i class="fa-solid fa-power-off" onclick="logout()"></i></span>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

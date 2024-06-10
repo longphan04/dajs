@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistical</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/statistical.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/statistical.css}">
+    <link rel='stylesheet' th:href="@{/css/yearpicker.css}" />
+    <script th:src="@{/js/yearpicker.js}"></script>
+</head>
+<body>
+<div>
+    <div class="tab">
+        <button class="tablinks active" id="monthlyBtn" onclick="changeTab('monthly')">Monthly</button>
+        <button class="tablinks" id="annualBtn" onclick="changeTab('annual')">Annual</button>
+    </div>
+    <div id="monthlyTab" class="tabcontent">
+        <label for="monthlyCalendar"></label>
+        <form id="monthlyForm" method="post" th:action="@{/statistical}">
+            <input type="month" id="monthlyCalendar" th:value="${statisticalDTO.getDateString()}"/>
+            <input type="hidden" id="monthlyDate" th:value="${statisticalDTO.getDateString()}">
+            <input type="hidden" value="true" name="monthly">
+            <input type="hidden" id="monthlyYear" name="year">
+            <input type="hidden" id="monthlyMonth" name="month">
+            <input type="button" value="OK" onclick="submitMonthlyForm()"/><br>
+        </form>
+        <label for="monthlyDepositAmount">DepositAmount</label>
+        <input type="text" readonly id="monthlyDepositAmount" th:value="${statisticalDTO.getDepositAmount()}">
+        <label for="monthlyWithdrawAmount">WithdrawAmount</label>
+        <input type="text" readonly id="monthlyWithdrawAmount" th:value="${statisticalDTO.getWithdrawAmount()}">
+        <label for="monthlySumAmount">SumAmount</label>
+        <input type="text" readonly id="monthlySumAmount" th:value="${statisticalDTO.getSumAmount()}">
+        <div>
+            <div class="tab">
+                <button class="tablinks active" onclick="toggleType(event, 'monthlySpend')">Spend</button>
+                <button class="tablinks" onclick="toggleType(event, 'monthlyIncome')">Income</button>
+            </div>
+            <div id="monthlySpend" class="tabcontent child">
+                <label for="monthlySpendDepositAmount">DepositAmount</label>
+                <input type="text" readonly id="monthlySpendDepositAmount"
+                       th:value="${statisticalDTO.getDepositAmount()}">
+            </div>
+            <div id="monthlyIncome" class="tabcontent child" style="display: none">
+                <label for="monthlyIncomeWithdrawAmount">WithdrawAmount</label>
+                <input type="text" readonly id="monthlyIncomeWithdrawAmount"
+                       th:value="${statisticalDTO.getWithdrawAmount()}">
+            </div>
+        </div>
+    </div>
+    <div id="annualTab" class="tabcontent" style="display: none">
+        <label for="annualCalendar"></label>
+        <form id="annualForm" method="post" th:action="@{/statistical}">
+            <input type="text" id="annualCalendar" th:value="${statisticalDTO.getDateString()}"/>
+            <input type="hidden" id="annualDate" name="year" th:value="${statisticalDTO.getDateString()}">
+            <input type="hidden" value="false" name="monthly">
+            <input type="button" value="OK" onclick="submitAnnualForm()"/><br>
+        </form>
+        <div>
+            <div class="tab">
+                <button class="tablinks active" onclick="toggleType(event, 'annualSpend')">Spend</button>
+                <button class="tablinks" onclick="toggleType(event, 'annualIncome')">Income</button>
+            </div>
+            <div id="annualSpend" class="tabcontent child">
+                <label for="annualSpendDepositAmount">DepositAmount</label>
+                <input type="text" readonly id="annualSpendDepositAmount"
+                       th:value="${statisticalDTO.getDepositAmount()}">
+            </div>
+            <div id="annualIncome" class="tabcontent child" style="display: none">
+                <label for="annualIncomeWithdrawAmount">WithdrawAmount</label>
+                <input type="text" readonly id="annualIncomeWithdrawAmount"
+                       th:value="${statisticalDTO.getWithdrawAmount()}">
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var isMonthly = /*[[${statisticalDTO.isMonthly()}]]*/ true;
+    /*]]>*/
+</script>
+</body>
+</html>
